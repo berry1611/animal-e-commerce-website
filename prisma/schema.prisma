@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Animal {
+  id        Int      @id @default(autoincrement())
+  name      String
+  races     Race[]
+  pets      Pet[]
+  imageUrl  String?  @map("image_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("animals")
+}
+
+model Race {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?  @db.Text
+  uniqueFact  String?  @map("unique_fact") @db.Text
+  imageUrl    String?  @map("image_url")
+  animal      Animal   @relation(fields: [animalId], references: [id])
+  animalId    Int      @map("animal_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  pets Pet[]
+  @@map("races")
+}
+
+model Pet {
+  id Int @id @default(autoincrement())
+
+  title       String?
+  price       Float     @default(0)
+  gender      Gender?
+  weight      String?
+  height      String?
+  dateOfBirth DateTime? @map("date_of_birth")
+  description String?   @db.Text
+  race        Race      @relation(fields: [raceId], references: [id])
+  raceId      Int       @map("race_id")
+  animal      Animal?   @relation(fields: [animalId], references: [id])
+  animalId    Int?      @map("animal_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("pets")
+}
+
+enum Gender {
+  male
+  female
+
+  @@map("gender")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String    @unique
+  password    String
+  phoneNumber String?   @map("phone_number")
+  address     String?
+  role        String    @default("customer")
+  breeders    Breeder[]
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Breeder {
+  id          Int      @id @default(autoincrement())
+  name        String
+  address     String
+  phoneNumber String   @map("phone_number")
+  instagramID String   @map("instagram_id")
+  userId      Int?
+  user        User?    @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("breeders")
+}

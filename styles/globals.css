@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading font-semibold;
+  }
+
+  p,
+  span,
+  div {
+    @apply font-sans font-medium;
+  }
+}
+
+@layer components {
+  .base-container {
+    @apply mx-24 flex w-screen xl:mx-auto xl:max-w-screen-desktop;
+  }
+
+  .main-container {
+    @apply base-container my-12;
+  }
+
+  .main-container-col {
+    @apply main-container flex-col;
+  }
+
+  .hewan-card-grid {
+    @apply grid max-h-fit gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5;
+  }
+
+  .hewan-card-grid-2 {
+    @apply grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+}
+
+body {
+  overflow-y: scroll !important;
+}
